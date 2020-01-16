@@ -1,0 +1,39 @@
+security:
+    oauth2:
+        resource:
+            userInfoUri: http://localhost:8082/validateUser
+server:
+    port: 8888
+#    ssl:
+#        enabled: true
+#        key-alias: 1
+#        key-password: 123456Aa@
+#        key-store: file:../etc/babelott_ecgo_new1.jks
+#        key-store-provider: SUN
+#        key-store-type: JKS
+#        key-store-password: 123456Aa@
+spring:
+    servlet:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+    datasource:
+        url: jdbc:mysql://127.0.0.1:3306/cenima?serverTimezone=UTC&amp&useSSL=false&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8
+        username: admin
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        initialization-mode: always
+        charset: utf8
+    jpa:
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: true
+logging:
+    level:
+        org:
+            hibernate:
+            type: trace

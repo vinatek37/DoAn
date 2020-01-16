@@ -1,0 +1,53 @@
+<div style="display: flex; justify-content: space-between; cursor: pointer;">
+  <p>
+    Welcome, Add
+  </p>
+  <i nz-icon nzType="arrow-left" nzTheme="outline" [routerLink]="['/danh-sach-lich-chieu']"></i>
+</div>
+<div nz-row>
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzSpan]="6" nzFor="roomId" nzRequired>Phòng</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzHasFeedback nzErrorTip="Không được để trống">
+            <nz-select [(ngModel)]="selectedValue" nzShowSearch formControlName="roomId" nzAllowClear
+              nzPlaceHolder="Chọn phòng" [attr.id]="'roomId'">
+              <nz-option nzLabel="Phòng số 1" nzValue="1"></nz-option>
+              <nz-option nzLabel="Phòng số 2" nzValue="2"></nz-option>
+              <nz-option nzLabel="Phòng số 3" nzValue="3"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzSpan]="6" nzFor="movieId" nzRequired>Danh sách phim</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzHasFeedback nzErrorTip="Không được để trống">
+            <nz-select [(ngModel)]="currentValue"  nzShowSearch formControlName="movieId" nzAllowClear
+              nzPlaceHolder="Chọn thể loại phim" [attr.id]="'movieId'">
+              <nz-option *ngFor="let option of (listFirm$ | async)" [nzValue]="option.id" [nzLabel]="option.name">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzSpan]="6" nzRequired nzFor="startTime">Ngày chiếu</nz-form-label>
+          <nz-form-control [nzSpan]="18" nzHasFeedback nzErrorTip="Không được để trống">
+            <nz-date-picker [nzStyle]="styleDate" formControlName="startTime" nzShowTime nzFormat="dd-MM-yyyy HH:mm"
+              nzPlaceHolder="Lịch chiếu" (nzOnOk)="onOk($event)" [attr.id]="'startTime'"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <nz-form-item>
+      <nz-form-control [nzOffset]="7" [nzSpan]="12">
+        <button nz-button nzType="primary" [disabled]="!validateForm.valid">Submit</button>
+        <button nz-button (click)="resetForm($event)">Reset</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

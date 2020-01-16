@@ -1,0 +1,56 @@
+<!-- <nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+        <h1>Ant Design Of Angular</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <ng-container *ngIf="isAuthenticated$ | async; else notAuth">
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/contacts">
+            <i nz-icon nzType="contacts" nzTheme="outline"></i>
+            <span *ngIf="!isCollapsed">Contacts</span>
+          </a>
+        </li>
+        <li nz-menu-item>
+          <a (click)="logout()">
+            <i nz-icon nzType="logout" nzTheme="outline"></i>
+            <span *ngIf="!isCollapsed">Logout</span>
+          </a>
+        </li>
+      </ng-container>
+      <ng-template #notAuth>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/login">
+            <i nz-icon nzType="login" nzTheme="outline"></i>
+            <span *ngIf="!isCollapsed">Login</span>
+          </a>
+        </li>
+      </ng-template>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <nz-breadcrumb [nzAutoGenerate]="true"></nz-breadcrumb>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
+
+
+ -->
+<router-outlet></router-outlet>
+<ng-http-loader [backdrop]="true" [backgroundColor]="'#ff0000'" [debounceDelay]="1" [extraDuration]="300" [minDuration]="300" [opacity]="0.6" [spinner]="spinkit.skWave">
+</ng-http-loader>

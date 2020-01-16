@@ -1,0 +1,40 @@
+<div style="display: flex; justify-content: space-between;">
+  <p>Danh sách lịch chiếu,</p>
+  <div>
+    <i nz-icon nzType="plus" nzTheme="outline" [routerLink]="['/danh-sach-lich-chieu/them-moi/0']"
+      nzTooltipTitle="Thêm mới" nzTooltipPlacement="top" nz-tooltip></i>
+    <i nz-icon nzType="retweet" nzTheme="outline" nzTooltipTitle="Làm mới" (click)="refetchData()" nzTooltipPlacement="top" nz-tooltip></i>
+  </div>
+</div>
+
+<div nz-row>
+  <div *ngIf="schedule$ | async as movies">
+    <nz-table #editRowTable #table [nzData]="movies">
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Tên phim</th>
+          <th>Phòng</th>
+          <th>Ngày/giờ chiếu</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of table.data">
+          <td>{{ data.id }}</td>
+          <td>{{ data.movie.name }}</td>
+          <td>{{ data.roomId }}</td>
+          <td>{{ data.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <div style="display: flex; justify-content: space-around; cursor: pointer;">
+              <i nz-icon nzType="edit" nzTheme="outline" [routerLink]="['/danh-sach-lich-chieu/them-moi', data.id]"
+                nzTooltipTitle="Chỉnh sửa" nzTooltipPlacement="top" nz-tooltip></i>
+              <i nz-icon nzType="delete" nzTheme="outline" (click)="onDelete(data.id)" nzTooltipTitle="Xóa"
+                nzTooltipPlacement="top" nz-tooltip></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

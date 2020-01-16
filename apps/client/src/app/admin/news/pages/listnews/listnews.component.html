@@ -1,0 +1,39 @@
+<div style="display: flex; justify-content: space-between;">
+  <p>Danh sách trailer,</p>
+  <div>
+    <i nz-icon nzType="plus" nzTheme="outline" [routerLink]="['/danh-sach-news/them-moi/0']" nzTooltipTitle="Thêm mới" nzTooltipPlacement="top" nz-tooltip></i>
+    <i nz-icon nzType="retweet" nzTheme="outline" nzTooltipTitle="Làm mới" (click)="refetchData()" nzTooltipPlacement="top" nz-tooltip></i>
+  </div>
+</div>
+
+<div nz-row>
+  <div *ngIf="news$ | async as news">
+    <nz-table #table [nzData]="news">
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Tiêu đề</th>
+          <th>Loại tin</th>
+          <th>Ảnh bìa</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of table.data">
+          <td>{{ data.id }}</td>
+          <td>{{ data.title }}</td>
+          <td>{{ data.type | typeNewPipe }}</td>
+          <td>
+            <div class="khungbia"><img [src]="data.image" alt=""></div>
+          </td>
+          <td>
+            <div style="display: flex; justify-content: space-around; cursor: pointer;">
+              <i nz-icon nzType="edit" nzTheme="outline" [routerLink]="['/danh-sach-news/them-moi', data.id]" nzTooltipTitle="Chỉnh sửa" nzTooltipPlacement="top" nz-tooltip></i>
+              <i nz-icon nzType="delete" nzTheme="outline" (click)="onDelete(data.id)" nzTooltipTitle="Xóa" nzTooltipPlacement="top" nz-tooltip></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

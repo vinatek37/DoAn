@@ -1,0 +1,25 @@
+[nz-carousel-content] {
+    text-align: center;
+    height: 560px;
+    width: 700px;
+    line-height: 160px;
+    background: #364d79;
+    color: #fff;
+    overflow: auto;
+}
+
+h3 {
+    color: #fff;
+}
+
+.khungbia {
+    height: 50px;
+    & img {
+        height: 100%;
+    }
+}
+
+i[nz-icon] {
+    font-size: 32px;
+    color: #999;
+}

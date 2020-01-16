@@ -1,0 +1,187 @@
+<nz-layout>
+    <nz-affix>
+        <nz-header>
+            <div class="logo" [routerLink]="['/login']"></div>
+            <ul class="menuHeader" nz-menu nzMode="horizontal">
+                <li nz-menu-item [ngx-scroll-to]="'scrollToLichChieu'">Lịch chiếu</li>
+                <li nz-menu-item [ngx-scroll-to]="'scrollToTinTuc'">Tin tức</li>
+                <li nz-menu-item [ngx-scroll-to]="'scrollToKhuyenMai'">Khuyễn mãi</li>
+                <li nz-menu-item [ngx-scroll-to]="'scrollToFooter'">Ứng dụng</li>
+                <button nz-button nzType="primary" nzShape="circle"><i nz-icon nzType="search"></i></button>
+
+            </ul>
+            <div class="icon" nz-dropdown [nzDropdownMenu]="menu">
+                <nz-avatar [nzText]="nameCurrent"></nz-avatar>
+            </div>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item *ngIf="isAuthenticated$ | async" (click)="showModalChiTiet()">
+                        <i nz-icon nzType="database" nzTheme="outline"></i> Chi tiết
+                    </li>
+                    <li nz-menu-item *ngIf="!(isAuthenticated$ | async)" (click)="showLoginform()">
+                        <i nz-icon nzType="login" nzTheme="outline"></i> Đăng nhập
+                    </li>
+                    <li nz-menu-item (click)="showRegisterForm()" *ngIf="!(isAuthenticated$ | async)">
+                        <i nz-icon nzType="team" nzTheme="outline"></i> Đăng ký
+                    </li>
+                    <li nz-menu-item (click)="logout()" *ngIf="isAuthenticated$ | async">
+                        <i nz-icon nzType="logout" nzTheme="outline"></i> Đăng xuất
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
+        </nz-header>
+    </nz-affix>
+    <router-outlet></router-outlet>
+    <nz-footer>
+        <div class="footer" id="scrollToFooter">
+            <div nz-row>
+                <div class="banner" nz-col nzSpan="24">
+                    <div class="mainMaxWidth">
+                        <div nz-row>
+                            <div nz-col class="left text-left" nzSpan="12">
+                                <p class="textLeft">Ứng dụng tiện lợi dành cho</p>
+                                <p class="textLeft">người yêu điện ảnh</p>
+                                <br />
+                                <p class="textSmallLeft">
+                                    Không chỉ đặt vé, bạn còn có thể bình luận phim, chấm điểm rạp và đổi quà hấp dẫn
+                                </p>
+                                <br />
+                                <button class="buttonLeft" nzSize="large" nz-button nzType="danger">
+                  App miễn phí - Tải về ngay!
+                </button>
+                                <p class="textAppUnder">
+                                    Phê phim có hai phiên bản Android và IOS
+                                </p>
+                            </div>
+                            <div nz-col nzSpan="12" class="right">
+                                <img src="assets/images/phone_hand.png" alt="" class="img-responsive" />
+                                <div class="slideScreen">
+                                    <p>hello</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="titleFooter">Design Website by Nguyen Ha Thuong @k56-CNTT</p>
+    </nz-footer>
+</nz-layout>
+<nz-modal [(nzVisible)]="isVisibleLogin" nzTitle="Đăng nhập" nzOkText="Đăng nhập" nzWidth="500" nzCancelText="Hủy bỏ" (nzOnOk)="login()" (nzOnCancel)="handleCancelLogin()">
+    <form nz-form [formGroup]="loginForm" class="login-form">
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="emailErrorTpl" [nzValidateStatus]="getControlValidateStatus('email')">
+                <nz-input-group nzPrefixIcon="user">
+                    <input type="text" nz-input formControlName="email" placeholder="Email" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control nzHasFeedback [nzErrorTip]="passErrorTpl" [nzValidateStatus]="getControlValidateStatus('password')">
+                <nz-input-group nzPrefixIcon="lock">
+                    <input type="password" nz-input formControlName="password" placeholder="Mật khẩu" />
+                </nz-input-group>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+
+    <ng-template #emailErrorTpl>
+        <ng-container *ngIf="emailCtrl.hasError('required')">
+            Vui lòng nhập email của bạn!
+        </ng-container>
+    </ng-template>
+
+    <ng-template #passErrorTpl>
+        <ng-container *ngIf="passwordCtrl.hasError('minlength')">
+            Mật khẩu ít nhất {{ passwordCtrl.getError('minlength').requiredLength }} kí tự
+        </ng-container>
+        <ng-container *ngIf="passwordCtrl.hasError('maxlength')">
+            Mật khẩu tối đa {{ passwordCtrl.getError('maxlength').requiredLength }} kí tự
+        </ng-container>
+        <ng-container *ngIf="passwordCtrl.hasError('required')">
+            Vui lòng nhập password của bạn!
+        </ng-container>
+    </ng-template>
+</nz-modal>
+<nz-modal [(nzVisible)]="isVisibleRegister" nzTitle="Đăng ký" nzOkText="Đăng ký" nzWidth="500" nzCancelText="Hủy bỏ" (nzOnOk)="register()" (nzOnCancel)="cancelRegister()">
+    <form nz-form [formGroup]="validateForm">
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Họ và tên</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="userErrorTpl1">
+                <input nz-input formControlName="name" placeholder="nhập họ và tên" />
+                <ng-template #userErrorTpl1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Nhập họ và tên!
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Số điện thoại</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="phoneErrorTpl1">
+                <input nz-input formControlName="phone" placeholder="nhập họ và tên" />
+                <ng-template #phoneErrorTpl1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Nhập số điện thoại
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="emailErrorTpl1">
+                <input nz-input formControlName="email" placeholder="email" type="email" />
+                <ng-template #emailErrorTpl1 let-control>
+                    <ng-container *ngIf="control.hasError('email')">
+                        Email sai định dạng
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Nhập email của bạn
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Mật khẩu</nz-form-label>
+            <div>
+                <nz-form-control [nzSpan]="12" nzHasFeedback nzErrorTip="Mời nhập mật khẩu!">
+                    <input nz-input type="password" formControlName="password" (ngModelChange)="validateConfirmPassword()" />
+                </nz-form-control>
+            </div>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="7" nzRequired>Xác nhận mật khẩu</nz-form-label>
+            <nz-form-control [nzSpan]="12" nzHasFeedback [nzErrorTip]="passwordErrorTpl1">
+                <input nz-input type="password" formControlName="confirm" placeholder="xác nhận mật khẩu" />
+                <ng-template #passwordErrorTpl1 let-control>
+                    <ng-container *ngIf="control.hasError('required')">
+                        Vui lòng nhập lại mật khẩu
+                    </ng-container>
+                    <ng-container *ngIf="control.hasError('confirm')">
+                        Mật khẩu không chính xác
+                    </ng-container>
+                </ng-template>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</nz-modal>
+
+<nz-drawer [nzVisible]="visibleChitiet" [nzWidth]="840" nzPlacement="left" [nzClosable]="false" (nzOnClose)="close()">
+    <h4 class="title" style=" margin-bottom: 24px;">Thông tin chi tiết</h4>
+    <nz-descriptions [nzColumn]="2" nzTitle="Tài khoản">
+        <nz-descriptions-item nzTitle="Họ tên" [nzSpan]="1">{{ currentAccount?.name }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Số điện thoại" [nzSpan]="1">{{ currentAccount?.phone }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Email" [nzSpan]="1">{{ currentAccount?.mail }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="Ngày tạo" [nzSpan]="1">{{ currentAccount?.createdAt | date: 'dd/MM/yyyy' }}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="4" nzTitle="Danh sách vé đã mua">
+        <div *ngFor="let item of listVe">
+            <nz-descriptions-item nzTitle="Mã" [nzSpan]="1">{{ item.code }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Tên phim" [nzSpan]="1">{{ item.movieName }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ghế" [nzSpan]="1">{{ item.roomName }} - {{ item.seatName }}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Thời gian chiếu" [nzSpan]="1">{{ item.startTime | date : 'dd/MM/yyyy HH:mm' }}</nz-descriptions-item>
+        </div>
+
+    </nz-descriptions>
+</nz-drawer>

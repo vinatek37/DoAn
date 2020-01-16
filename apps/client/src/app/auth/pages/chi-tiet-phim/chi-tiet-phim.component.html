@@ -1,0 +1,125 @@
+<nz-content>
+  <div nz-row>
+    <div class="block" nz-col nzSpan="24">
+      <div class="detailMainInfo mainMaxWidth2">
+        <div nz-col nzSpan="6" class="filmPosterTop">
+          <div *ngIf="movieDetail" nz-row [style.background-image]="backgroundImg" class="posterMain overlay">
+            <div class="overlay">
+              <button>
+                <img src="assets/images/play-video.png" alt="" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div nz-col nzSpan="10" class="infoMain">
+          <div class="realeDate">{{movieDetail?.releaseDate | date: 'dd/MM/yyyy HH:mm' }}</div>
+          <br>
+          <div class="parentInfo2">
+            <span>{{movieDetail?.name}}</span>
+          </div>
+          <div class="longTime">{{movieDetail?.duration}} phút - 7.5 IMDb - 2D/Digital</div>
+          <br>
+          <button nz-button nzType="danger">Mua vé</button>
+        </div>
+        <div class="ratingStar" nz-col nzSpan="4">
+          <nz-progress [nzPercent]="90" nzType="circle" [nzFormat]="formatOne"
+            [nzStrokeColor]="{ '0%': '#108ee9', '50%': '#2db7f5', '100%': '#87d068' }"></nz-progress>
+          <nz-rate [ngModel]="4.5" nzDisabled></nz-rate>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- lich chieu -->
+  <div>
+    <nz-tabset nzSize="large">
+      <nz-tab nzTitle="Lịch chiếu">
+        <div nz-row>
+          <div nz-col nzSpan="4" *ngFor="let item of lstSchedule">
+            <div (click)="showBooking(item)">
+              {{ item.startTime | date: 'dd/MM/yyyy HH:mm' }}
+            </div>
+          </div>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Thông tin">
+        <div nz-row *ngIf="movieDetail">
+          <nz-descriptions nzTitle="Thông tin" [nzColumn]="2" nzBordered nzLayout="horizontal">
+            <nz-descriptions-item nzTitle="Ngày phát hành">{{ movieDetail?.releaseDate | date: 'dd/MM/yyyy HH:mm' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Đạo diễn"> {{movieDetail?.directors}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Diễn viên">{{movieDetail?.cast}}</nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Thời gian">
+              {{movieDetail?.duration}} phút
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Ngôn ngữ">
+              {{movieDetail?.language}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Quốc gia sản xuất">
+              {{movieDetail?.nation}}
+            </nz-descriptions-item>
+            <nz-descriptions-item nzTitle="Nội dung" [nzSpan]="3">
+              {{movieDetail?.about}}
+            </nz-descriptions-item>
+
+          </nz-descriptions>
+        </div>
+      </nz-tab>
+      <nz-tab nzTitle="Đánh giá">
+        <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+          <ng-template #item let-item>
+            <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.datetime">
+              <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
+              <nz-comment-content>
+                <p>{{ item.content }}</p>
+              </nz-comment-content>
+              <nz-comment-action>Trả lời</nz-comment-action>
+            </nz-comment>
+          </ng-template>
+        </nz-list>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</nz-content>
+<!-- Danh sach ghe -->
+<nz-modal [(nzVisible)]="isVisibleTicket" nzTitle="Danh sách ghế" nzOkText="Đặt vé" nzWidth="900" nzCancelText="Hủy bỏ"
+  (nzOnOk)="booking()" (nzOnCancel)="cancelBooking()">
+  <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="log($event)">
+    <div nz-row *ngIf="seats$ | async as seats">
+      <div *ngFor="let index of seats; index as i">
+        <div nz-col nzSpan="2" *ngIf="i % 5 == 0"></div>
+        <div nz-col nzSpan="2">
+          <label nz-checkbox [nzValue]="index.seatId" [nzDisabled]="!index.isEmpty">{{index.name}}</label>
+        </div>
+        <br *ngIf="i % 5 == 5 && i != 0">
+      </div>
+      <br>
+      <div nz-col nzSpan="16" style="text-align: center;" nzOffset="4">
+        <h3>Màn hình</h3>
+        <hr>
+      </div>
+      <br>
+      <br>
+      <div nz-col nzSpan="4" nzOffset="2">
+        <label nz-checkbox nzDisabled="true">Ghế đã đặt</label>
+      </div>
+      <div nz-col nzSpan="4">
+        <label nz-checkbox nzValue="0">Ghế đang trống</label>
+      </div>
+      <div nz-col nzSpan="12" nzOffset="2"><strong>Tổng số vé: </strong>
+        <b style="color: #75D701; font-size: 22px;">{{lstSeatPick.length}} </b>--- <strong>Tổng số tiền:
+        </strong><b style="color: #91D042; font-size: 22px;">{{sumMoney | vndPipe}}</b></div>
+    </div>
+  </nz-checkbox-wrapper>
+
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisibleResult" (nzOnCancel)="handleCancel()" *ngIf="lstResult.length > 0">
+  <div>
+    <nz-result nzStatus="success" nzTitle="Chúc mừng bạn đã đặt vé thành công"
+      nzSubTitle="Mã vé: {{lstResult[0].code}} | Tổng tiền: {{lstResult[0].price | vndPipe }}">
+    </nz-result>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Đóng</button>
+  </div>
+</nz-modal>

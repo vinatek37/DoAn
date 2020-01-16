@@ -1,0 +1,42 @@
+<div style="display: flex; justify-content: space-between;">
+    <p>Danh sách phim,</p>
+    <div>
+      <i nz-icon nzType="plus" nzTheme="outline" [routerLink]="['/danh-sach-phim/them-moi/0']" nzTooltipTitle="Thêm mới" nzTooltipPlacement="top" nz-tooltip></i>
+      <i nz-icon nzType="retweet" nzTheme="outline" nzTooltipTitle="Làm mới" (click)="refetchData()" nzTooltipPlacement="top" nz-tooltip></i>
+    </div>
+
+</div>
+
+<div nz-row>
+    <div *ngIf="movies$ | async as movies">
+        <nz-table #editRowTable #table [nzData]="movies">
+            <thead>
+                <tr>
+                    <th>Mã</th>
+                    <th>Tên phim</th>
+                    <th>Thể loại</th>
+                    <th>Ngày phát hành</th>
+                    <th>Độ dài</th>
+                    <th>Đạo diễn</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of table.data">
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>Kinh dị</td>
+                    <td>{{ data.releaseDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ data.duration }} phút</td>
+                    <td>{{ data.directors }}</td>
+                    <td>
+                        <div style="display: flex; justify-content: space-around; cursor: pointer;">
+                            <i nz-icon nzType="edit" nzTheme="outline" [routerLink]="['/danh-sach-phim/them-moi', data.id]" nzTooltipTitle="Chỉnh sửa" nzTooltipPlacement="top" nz-tooltip></i>
+                            <i nz-icon nzType="delete" nzTheme="outline" (click)="onDelete(data.id)" nzTooltipTitle="Xóa" nzTooltipPlacement="top" nz-tooltip></i>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>

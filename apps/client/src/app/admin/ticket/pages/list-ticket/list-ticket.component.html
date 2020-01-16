@@ -1,0 +1,50 @@
+<div style="display: flex; justify-content: space-between;">
+    <p>Danh sách vé đã đặt,</p>
+    <i nz-icon nzType="retweet" nzTheme="outline" (click)="refetchData()" nzTooltipTitle="Làm mới" nzTooltipPlacement="top" nz-tooltip></i>
+</div>
+
+<div nz-row>
+    <div nz-col nzSpan="6">
+        Lọc theo ngày
+    </div>
+    <div nz-col nzSpan="12">
+        <nz-range-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="dd-MM-yyyy HH:mm" [nzPlaceHolder]="['Từ ngày', 'Đến ngày']" ngModel (ngModelChange)="onChange($event)" (nzOnOk)="onOk($event)">
+        </nz-range-picker>
+    </div>
+</div>
+
+<div nz-row class="list-ticket">
+    <div>
+        <nz-table #editRowTable #table [nzData]="listTicket">
+            <thead>
+                <tr>
+                    <th>Mã</th>
+                    <th>Giá</th>
+                    <th>Thời gian chiếu</th>
+                    <th>Độ dài</th>
+                    <th>Tên phim</th>
+                    <th>Phòng</th>
+                    <th>Ghế</th>
+                    <th>Tình trạng</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of table.data">
+                    <td>{{ data.code }}</td>
+                    <td>{{ data.price | vndPipe }}</td>
+                    <td>{{ data.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ data.duration }} phút</td>
+                    <td>{{ data.movieName }}</td>
+                    <td>{{ data.roomName }}</td>
+                    <td>{{ data.seatName }}</td>
+                    <td>
+                        <div style="display: flex; justify-content: space-around; cursor: pointer;">
+                            <i nz-icon nzType="check-circle" (click)="onOnConfirmState(data.id)" nzTheme="outline" *ngIf="!data.state"  nzTooltipTitle="Xử lý vé" nzTooltipPlacement="top" nz-tooltip></i>
+                            <i *ngIf="data.state" (click)="showMessError()" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"  nzTooltipTitle="Vé đã được giao" nzTooltipPlacement="top" nz-tooltip></i>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</div>
